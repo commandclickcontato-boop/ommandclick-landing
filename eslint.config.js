@@ -7,12 +7,15 @@ module.exports = defineConfig([
   {
     ignores: [
       "dist/*",
+      "dist/**/*",
       "index.ts",
       "rootStore.example.ts",
       "nativewind-env.d.ts",
       "patches/*",
       "bun.lock",
       "eslint.config.js",
+      "inject-pixel.mjs",
+      "build-vercel.sh",
     ],
     settings: {
       "import/resolver": {
