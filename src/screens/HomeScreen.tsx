@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import MechanicBackground from "../components/MechanicBackground";
-import CommandClickLogo from "../components/CommandClickLogoImage";
+import CommandClickLogo from "../components/CommandClickLogo";
 import MockupImage from "../components/MockupImage";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
