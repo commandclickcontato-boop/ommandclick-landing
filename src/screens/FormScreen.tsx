@@ -7,7 +7,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
   Keyboard,
   Alert,
 } from "react-native";
@@ -116,14 +115,13 @@ export default function FormScreen({ navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 bg-slate-900"
     >
-      <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View className="flex-1">
-          <ScrollView
-            className="flex-1"
-            contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
-            keyboardShouldPersistTaps="handled"
-          >
-            <ResponsiveContainer maxWidth={800}>
+      <View className="flex-1">
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ResponsiveContainer maxWidth={800}>
             {/* Header */}
             <View
               className="px-6 bg-slate-800 border-b border-slate-700"
@@ -157,6 +155,8 @@ export default function FormScreen({ navigation }: Props) {
                   placeholderTextColor="#64748b"
                   className="bg-slate-800 text-white px-4 py-4 rounded-xl border border-slate-700"
                   autoCapitalize="words"
+                  // @ts-ignore - cursor style for web
+                  style={{ cursor: 'text' }}
                 />
                 {errors.fullName && (
                   <Text className="text-red-400 text-sm mt-1">
@@ -387,7 +387,6 @@ export default function FormScreen({ navigation }: Props) {
             </ResponsiveContainer>
           </ScrollView>
         </View>
-      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
