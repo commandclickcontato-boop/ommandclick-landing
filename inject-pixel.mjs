@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log('📊 Injecting Meta Pixel into HTML...');
+console.log('📊 Injecting Meta Pixel and loading indicator into HTML...');
 
 const htmlPath = path.join(__dirname, 'dist', 'index.html');
 
@@ -38,10 +38,79 @@ const metaPixelCode = `
   <!-- End Meta Pixel Code -->
 `;
 
+// Loading indicator and error handler
+const loadingScript = `
+  <style>
+    .loading-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .loading-content {
+      text-align: center;
+      color: white;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #1e293b;
+      border-top: 4px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <script>
+    console.log('[CommandClick] HTML loaded');
+
+    // Add loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'loading-indicator';
+    loadingDiv.id = 'loading';
+    loadingDiv.innerHTML = '<div class="loading-content"><div class="spinner"></div><h2>Command Click</h2><p>Carregando...</p></div>';
+    document.body.appendChild(loadingDiv);
+
+    // Check if app loaded after 5 seconds
+    setTimeout(() => {
+      const root = document.getElementById('root');
+      if (!root || !root.hasChildNodes() || root.children.length === 0) {
+        console.error('[CommandClick] App failed to load');
+        loadingDiv.innerHTML = '<div class="loading-content"><h2 style="color: #ef4444;">❌ Erro ao carregar</h2><p>Por favor, recarregue a página</p><button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer;">Recarregar</button></div>';
+      } else {
+        console.log('[CommandClick] App loaded successfully');
+        loadingDiv.style.display = 'none';
+      }
+    }, 5000);
+
+    // Also check immediately when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.hasChildNodes() && root.children.length > 0) {
+          console.log('[CommandClick] App ready');
+          const loading = document.getElementById('loading');
+          if (loading) loading.style.display = 'none';
+        }
+      }, 1000);
+    });
+  </script>
+`;
+
 // Inject before </head>
-html = html.replace('</head>', `${metaPixelCode}</head>`);
+html = html.replace('</head>', `${metaPixelCode}${loadingScript}</head>`);
 
 // Write back
 fs.writeFileSync(htmlPath, html, 'utf8');
 
-console.log('✅ Meta Pixel injected successfully!');
+console.log('✅ Meta Pixel and loading indicator injected successfully!');
