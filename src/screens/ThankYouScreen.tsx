@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
+import { trackPageView, trackContact, trackButtonClick } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ThankYou">;
 
@@ -12,6 +13,8 @@ export default function ThankYouScreen({ navigation }: Props) {
   const { formData } = useFormStore();
 
   const handleWhatsAppContact = () => {
+    trackContact("whatsapp");
+    trackButtonClick("Falar agora no WhatsApp", "Thank You Page");
     const message = encodeURIComponent(
       `Olá! Acabei de solicitar uma demonstração do Command Click. Meu nome é ${formData.fullName} da ${formData.workshopName}.`
     );
@@ -19,6 +22,9 @@ export default function ThankYouScreen({ navigation }: Props) {
   };
 
   useEffect(() => {
+    // Track thank you page view
+    trackPageView("Thank You - Conversion Complete");
+
     // Log form submission for tracking
     console.log("Form submitted:", formData);
   }, [formData]);

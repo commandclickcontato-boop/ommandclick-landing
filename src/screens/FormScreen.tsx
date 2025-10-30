@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
 import type { FormErrors } from "../types/form";
 import { sendLeadEmail } from "../utils/sendLeadEmail";
+import { trackPageView, trackFormStart, trackLeadDual } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Form">;
 
@@ -25,6 +26,20 @@ export default function FormScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const { formData, setFormData, submitForm } = useFormStore();
   const [errors, setErrors] = useState<FormErrors>({});
+  const [hasStartedForm, setHasStartedForm] = useState(false);
+
+  // Track page view when component mounts
+  useEffect(() => {
+    trackPageView("Form - Lead Capture");
+  }, []);
+
+  // Track when user starts filling form (on first input)
+  const handleFormStart = () => {
+    if (!hasStartedForm) {
+      setHasStartedForm(true);
+      trackFormStart();
+    }
+  };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -66,6 +81,15 @@ export default function FormScreen({ navigation }: Props) {
 
   const handleSubmit = async () => {
     if (validateForm()) {
+      // Track lead conversion with Meta Pixel (browser + API)
+      await trackLeadDual({
+        fullName: formData.fullName,
+        workshopName: formData.workshopName,
+        city: formData.city,
+        state: formData.state,
+        whatsapp: formData.whatsapp,
+      });
+
       // Send email with lead data
       const emailSent = await sendLeadEmail(formData);
 
@@ -126,6 +150,7 @@ export default function FormScreen({ navigation }: Props) {
                 <TextInput
                   value={formData.fullName}
                   onChangeText={(text) => setFormData({ fullName: text })}
+                  onFocus={handleFormStart}
                   placeholder="Seu nome completo"
                   placeholderTextColor="#64748b"
                   className="bg-slate-800 text-white px-4 py-4 rounded-xl border border-slate-700"

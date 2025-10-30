@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Pressable, ScrollView, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,17 +7,26 @@ import type { RootStackParamList } from "../navigation/types";
 import MechanicBackground from "../components/MechanicBackground";
 import CommandClickLogo from "../components/CommandClickLogo";
 import MockupImage from "../components/MockupImage";
+import { trackPageView, trackButtonClick, trackContact } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
 
+  // Track page view when component mounts
+  useEffect(() => {
+    trackPageView("Home - Landing Page");
+  }, []);
+
   const scrollToForm = () => {
+    trackButtonClick("Solicitar Demonstração", "Hero Section");
     navigation.navigate("Form");
   };
 
   const handleWhatsAppSupport = () => {
+    trackContact("whatsapp");
+    trackButtonClick("WhatsApp Support", "Footer");
     Linking.openURL("https://wa.me/5513982111925");
   };
 
