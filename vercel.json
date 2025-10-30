@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bun run export:web",
+  "buildCommand": "bash build-vercel.sh",
   "outputDirectory": "dist",
   "installCommand": "bun install",
   "devCommand": "bun run web",
