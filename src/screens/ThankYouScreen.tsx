@@ -65,13 +65,10 @@ export default function ThankYouScreen({ navigation }: Props) {
 
         {/* Additional Info */}
         <View className="mt-12 bg-slate-800 p-6 rounded-2xl border border-slate-700">
-          <View className="flex-row items-start mb-3">
-            <Ionicons
-              name="time"
-              size={24}
-              color="#3b82f6"
-              style={{ marginRight: 12 }}
-            />
+          <View className="flex-row items-start mb-6">
+            <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+              <Ionicons name="time" size={24} color="white" />
+            </View>
             <View className="flex-1">
               <Text className="text-white font-bold text-base mb-1">
                 Resposta rápida
@@ -83,12 +80,9 @@ export default function ThankYouScreen({ navigation }: Props) {
           </View>
 
           <View className="flex-row items-start">
-            <Ionicons
-              name="shield-checkmark"
-              size={24}
-              color="#10b981"
-              style={{ marginRight: 12 }}
-            />
+            <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+              <Ionicons name="shield-checkmark" size={24} color="white" />
+            </View>
             <View className="flex-1">
               <Text className="text-white font-bold text-base mb-1">
                 Sem compromisso
