@@ -18,6 +18,7 @@ import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
 import type { FormErrors } from "../types/form";
 import { sendLeadEmail } from "../utils/sendLeadEmail";
+import ResponsiveContainer from "../components/ResponsiveContainer";
 import { trackPageView, trackFormStart, trackLeadDual } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Form">;
@@ -122,6 +123,7 @@ export default function FormScreen({ navigation }: Props) {
             contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
             keyboardShouldPersistTaps="handled"
           >
+            <ResponsiveContainer maxWidth={800}>
             {/* Header */}
             <View
               className="px-6 bg-slate-800 border-b border-slate-700"
@@ -382,6 +384,7 @@ export default function FormScreen({ navigation }: Props) {
                 </Text>
               </Pressable>
             </View>
+            </ResponsiveContainer>
           </ScrollView>
         </View>
       </TouchableWithoutFeedback>

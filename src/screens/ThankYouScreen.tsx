@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
+import ResponsiveContainer from "../components/ResponsiveContainer";
 import { trackPageView, trackContact, trackButtonClick } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ThankYou">;
@@ -31,6 +32,7 @@ export default function ThankYouScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView className="flex-1 bg-slate-900" edges={["top", "bottom"]}>
+      <ResponsiveContainer maxWidth={800}>
       <View className="flex-1 px-6 justify-center items-center">
         {/* Success Icon */}
         <View className="bg-green-600 w-24 h-24 rounded-full items-center justify-center mb-8">
@@ -106,6 +108,7 @@ export default function ThankYouScreen({ navigation }: Props) {
           </View>
         </View>
       </View>
+      </ResponsiveContainer>
     </SafeAreaView>
   );
 }

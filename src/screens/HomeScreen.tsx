@@ -7,6 +7,7 @@ import type { RootStackParamList } from "../navigation/types";
 import MechanicBackground from "../components/MechanicBackground";
 import CommandClickLogo from "../components/CommandClickLogo";
 import MockupImage from "../components/MockupImage";
+import ResponsiveContainer from "../components/ResponsiveContainer";
 import { trackPageView, trackButtonClick, trackContact } from "../utils/metaPixel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
@@ -36,6 +37,7 @@ export default function HomeScreen({ navigation }: Props) {
         className="flex-1"
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
       >
+        <ResponsiveContainer>
         {/* Hero Section */}
         <View
           className="px-6"
@@ -331,6 +333,7 @@ export default function HomeScreen({ navigation }: Props) {
             © 2025 Command Click. Todos os direitos reservados.
           </Text>
         </View>
+        </ResponsiveContainer>
       </ScrollView>
     </MechanicBackground>
   );
