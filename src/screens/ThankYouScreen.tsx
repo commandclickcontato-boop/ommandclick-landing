@@ -64,14 +64,14 @@ export default function ThankYouScreen({ navigation }: Props) {
         </Pressable>
 
         {/* Additional Info */}
-        <View className="mt-12">
+        <View className="mt-12 px-4">
           <Text className="text-white text-xl font-bold text-center mb-6">
             O que acontece agora?
           </Text>
 
-          <View className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+          <View className="bg-slate-800 px-6 py-6 rounded-2xl border border-slate-700">
             <View className="flex-row items-start mb-6">
-              <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+              <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
                 <Ionicons name="time" size={24} color="white" />
               </View>
               <View className="flex-1">
@@ -79,13 +79,13 @@ export default function ThankYouScreen({ navigation }: Props) {
                   Resposta rápida
                 </Text>
                 <Text className="text-slate-400 text-sm leading-relaxed">
-                  Nosso time costuma responder em até 2 horas úteis
+                  Nosso time responde em até 2 horas úteis
                 </Text>
               </View>
             </View>
 
             <View className="flex-row items-start">
-              <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+              <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
                 <Ionicons name="shield-checkmark" size={24} color="white" />
               </View>
               <View className="flex-1">
@@ -93,7 +93,7 @@ export default function ThankYouScreen({ navigation }: Props) {
                   Teste sem custo
                 </Text>
                 <Text className="text-slate-400 text-sm leading-relaxed">
-                  Conheça o sistema sem nenhum investimento inicial
+                  Conheça o sistema sem investimento inicial
                 </Text>
               </View>
             </View>
