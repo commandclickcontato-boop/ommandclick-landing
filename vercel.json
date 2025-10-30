@@ -1,16 +1,33 @@
 {
+  "version": 2,
   "buildCommand": "bun run export:web",
   "outputDirectory": "dist",
   "installCommand": "bun install",
   "devCommand": "bun run web",
-  "routes": [
+  "headers": [
     {
-      "src": "/_expo/static/(.*)",
-      "dest": "/_expo/static/$1"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/_expo/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
