@@ -69,7 +69,7 @@ export default function ThankYouScreen({ navigation }: Props) {
             O que acontece agora?
           </Text>
 
-          <View className="bg-slate-800 px-5 py-8 rounded-2xl border border-slate-700">
+          <View className="bg-slate-800 px-5 pt-8 pb-10 rounded-2xl border border-slate-700">
             <View className="flex-row items-start mb-8">
               <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
                 <Ionicons name="time" size={24} color="white" />
