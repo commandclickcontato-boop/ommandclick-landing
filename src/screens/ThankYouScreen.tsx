@@ -64,35 +64,35 @@ export default function ThankYouScreen({ navigation }: Props) {
         </Pressable>
 
         {/* Additional Info */}
-        <View className="mt-12 px-4">
-          <Text className="text-white text-xl font-bold text-center mb-6">
+        <View className="mt-12 px-5">
+          <Text className="text-white text-lg font-bold text-center mb-5">
             O que acontece agora?
           </Text>
 
-          <View className="p-8">
-            <View className="flex-row items-start mb-8">
-              <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
-                <Ionicons name="time" size={24} color="white" />
+          <View className="bg-slate-800 px-5 py-6 rounded-xl border border-slate-700">
+            <View className="flex-row items-start mb-6">
+              <View className="bg-blue-600 w-10 h-10 rounded-lg items-center justify-center mr-3 flex-shrink-0">
+                <Ionicons name="time" size={20} color="white" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-base mb-2">
+                <Text className="text-white font-semibold text-sm mb-1">
                   Resposta rápida
                 </Text>
-                <Text className="text-slate-400 text-sm leading-relaxed">
+                <Text className="text-slate-400 text-xs leading-relaxed">
                   Resposta em até 2 horas
                 </Text>
               </View>
             </View>
 
             <View className="flex-row items-start">
-              <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
-                <Ionicons name="shield-checkmark" size={24} color="white" />
+              <View className="bg-green-600 w-10 h-10 rounded-lg items-center justify-center mr-3 flex-shrink-0">
+                <Ionicons name="shield-checkmark" size={20} color="white" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-base mb-2">
+                <Text className="text-white font-semibold text-sm mb-1">
                   100% gratuito
                 </Text>
-                <Text className="text-slate-400 text-sm leading-relaxed">
+                <Text className="text-slate-400 text-xs leading-relaxed">
                   Demonstração sem custo
                 </Text>
               </View>
