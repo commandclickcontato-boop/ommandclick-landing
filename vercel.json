@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "bun run export:web",
+  "buildCommand": "bash build.sh",
   "outputDirectory": "dist",
-  "installCommand": "bun install",
-  "devCommand": "bun run web",
+  "installCommand": "npm install",
+  "framework": null,
   "headers": [
     {
       "source": "/(.*)",

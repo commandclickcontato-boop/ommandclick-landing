@@ -16,6 +16,7 @@ module.exports = defineConfig([
       "eslint.config.js",
       "inject-pixel.mjs",
       "build-vercel.sh",
+      "build.sh",
     ],
     settings: {
       "import/resolver": {
