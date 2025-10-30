@@ -5,7 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import MechanicBackground from "../components/MechanicBackground";
-import CommandClickLogo from "../components/CommandClickLogo";
+import CommandClickLogo from "../components/CommandClickLogoImage";
+import MockupImage from "../components/MockupImage";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -81,13 +82,8 @@ export default function HomeScreen({ navigation }: Props) {
             </View>
           </View>
 
-          {/* Mockup Placeholder */}
-          <View className="mt-12 bg-slate-800 rounded-2xl p-8 items-center justify-center border-2 border-slate-700">
-            <Ionicons name="phone-portrait" size={80} color="#475569" />
-            <Text className="text-slate-500 text-center mt-4 text-sm">
-              App em celular e notebook
-            </Text>
-          </View>
+          {/* Mockup Image */}
+          <MockupImage />
         </View>
 
         {/* Main Benefits Section */}
