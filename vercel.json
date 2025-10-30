@@ -1,0 +1,10 @@
+{
+  "buildCommand": "bun run export:web",
+  "outputDirectory": "dist",
+  "framework": "expo",
+  "installCommand": "bun install",
+  "devCommand": "bun run web",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
