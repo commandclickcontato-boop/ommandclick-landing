@@ -7,26 +7,20 @@ interface LogoImageProps {
 }
 
 const sizeConfig = {
-  small: { width: 150, height: 50 },
-  medium: { width: 240, height: 80 },
-  large: { width: 320, height: 107 },
+  small: { width: 180, height: 60 },
+  medium: { width: 260, height: 87 },
+  large: { width: 340, height: 113 },
 };
 
 /**
- * INSTRUÇÕES PARA USAR A LOGO REAL:
- *
- * 1. Adicione a imagem da logo em: assets/images/command-click-logo.png
- * 2. Substitua a importação em HomeScreen.tsx:
- *    - De: import CommandClickLogo from "../components/CommandClickLogo"
- *    - Para: import CommandClickLogo from "../components/CommandClickLogoImage"
- * 3. A logo será exibida automaticamente!
+ * Logo Component - Uses the full Command Click logo
  */
 
 export default function CommandClickLogoImage({
   size = "medium",
 }: LogoImageProps) {
   const dimensions = sizeConfig[size];
-  const logoSource = require("../../assets/images/command-click-logo.png");
+  const logoSource = require("../../assets/images/command-click-logo-full.png");
 
   return (
     <View style={{ width: dimensions.width, height: dimensions.height }}>
