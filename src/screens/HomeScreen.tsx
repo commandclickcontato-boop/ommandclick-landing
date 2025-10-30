@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
+import MechanicBackground from "../components/MechanicBackground";
+import CommandClickLogo from "../components/CommandClickLogo";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -15,11 +17,11 @@ export default function HomeScreen({ navigation }: Props) {
   };
 
   const handleWhatsAppSupport = () => {
-    Linking.openURL("https://wa.me/5511999999999");
+    Linking.openURL("https://wa.me/5513982111925");
   };
 
   return (
-    <View className="flex-1 bg-slate-900">
+    <MechanicBackground>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
@@ -31,12 +33,7 @@ export default function HomeScreen({ navigation }: Props) {
         >
           {/* Logo Area */}
           <View className="items-center mb-8">
-            <View className="bg-blue-600 w-20 h-20 rounded-2xl items-center justify-center mb-4">
-              <Ionicons name="checkmark-done" size={40} color="white" />
-            </View>
-            <Text className="text-white text-3xl font-bold text-center">
-              Command Click
-            </Text>
+            <CommandClickLogo size="large" />
           </View>
 
           {/* Hero Title */}
@@ -309,11 +306,8 @@ export default function HomeScreen({ navigation }: Props) {
         {/* Footer */}
         <View className="px-6 py-12 bg-slate-950 border-t border-slate-800">
           <View className="items-center mb-6">
-            <View className="bg-blue-600 w-16 h-16 rounded-xl items-center justify-center mb-3">
-              <Ionicons name="checkmark-done" size={32} color="white" />
-            </View>
-            <Text className="text-white text-2xl font-bold">Command Click</Text>
-            <Text className="text-slate-500 text-sm mt-2">
+            <CommandClickLogo size="medium" />
+            <Text className="text-slate-500 text-sm mt-4">
               Checklist Digital para Oficinas Mecânicas
             </Text>
           </View>
@@ -333,6 +327,6 @@ export default function HomeScreen({ navigation }: Props) {
           </Text>
         </View>
       </ScrollView>
-    </View>
+    </MechanicBackground>
   );
 }

@@ -2,6 +2,13 @@
 
 Landing page de alta conversão para o Command Click, um Checklist Digital para Oficinas Mecânicas.
 
+## ✅ Atualizações Recentes
+
+- **Logo oficial**: Componente criado (aguardando upload da imagem)
+- **WhatsApp**: Atualizado para +55 13 98211-1925
+- **Background**: Padrão sutil de oficina mecânica com transparência implementado
+- **Design**: Fundo azul escuro profissional com overlays suaves
+
 ## Objetivo
 
 Gerar leads qualificados de donos de oficinas com 3+ mecânicos interessados em implementar o sistema Command Click.
@@ -65,17 +72,24 @@ Campos obrigatórios com validação:
 
 ```
 src/
+├── components/
+│   ├── CommandClickLogo.tsx   # Logo oficial (com fallback)
+│   └── MechanicBackground.tsx # Background com padrão de oficina
 ├── screens/
-│   ├── HomeScreen.tsx       # Landing page principal
-│   ├── FormScreen.tsx        # Formulário de captura
-│   └── ThankYouScreen.tsx    # Página de confirmação
+│   ├── HomeScreen.tsx          # Landing page principal
+│   ├── FormScreen.tsx          # Formulário de captura
+│   └── ThankYouScreen.tsx      # Página de confirmação
 ├── navigation/
-│   ├── RootNavigator.tsx     # Navegação principal
-│   └── types.ts              # Tipos de navegação
+│   ├── RootNavigator.tsx       # Navegação principal
+│   └── types.ts                # Tipos de navegação
 ├── state/
-│   └── formStore.ts          # Gerenciamento de estado com Zustand
+│   └── formStore.ts            # Gerenciamento de estado com Zustand
 └── types/
-    └── form.ts               # Tipos do formulário
+    └── form.ts                 # Tipos do formulário
+
+assets/
+└── images/
+    └── command-click-logo.png  # Logo oficial (adicionar aqui)
 ```
 
 ## Design
@@ -126,6 +140,18 @@ Validações implementadas:
 5. **Submissão** → Dados salvos no estado persistente
 6. **Thank You** → Confirmação + opção de contato imediato via WhatsApp
 
+## Como adicionar a logo oficial
+
+Veja instruções detalhadas em: `LOGO_INSTRUCTIONS.md`
+
+**Resumo rápido:**
+1. Acesse a aba **IMAGES** no Vibecode
+2. Faça upload da imagem da logo
+3. Salve como: `command-click-logo.png`
+4. A logo será detectada automaticamente
+
+Enquanto a imagem não for adicionada, o app exibe um fallback estilizado.
+
 ## Próximos Passos
 
 Para produção, considere:
@@ -138,5 +164,4 @@ Para produção, considere:
 
 ## Contato
 
-WhatsApp de suporte configurado para: +55 11 99999-9999
-(Atualizar com número real na produção)
+WhatsApp de suporte: **+55 13 98211-1925**

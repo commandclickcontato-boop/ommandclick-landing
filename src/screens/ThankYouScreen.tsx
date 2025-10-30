@@ -15,7 +15,7 @@ export default function ThankYouScreen({ navigation }: Props) {
     const message = encodeURIComponent(
       `Olá! Acabei de solicitar uma demonstração do Command Click. Meu nome é ${formData.fullName} da ${formData.workshopName}.`
     );
-    Linking.openURL(`https://wa.me/5511999999999?text=${message}`);
+    Linking.openURL(`https://wa.me/5513982111925?text=${message}`);
   };
 
   useEffect(() => {
