@@ -64,32 +64,38 @@ export default function ThankYouScreen({ navigation }: Props) {
         </Pressable>
 
         {/* Additional Info */}
-        <View className="mt-12 bg-slate-800 p-6 rounded-2xl border border-slate-700">
-          <View className="flex-row items-start mb-6">
-            <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
-              <Ionicons name="time" size={24} color="white" />
-            </View>
-            <View className="flex-1">
-              <Text className="text-white font-bold text-base mb-1">
-                Resposta rápida
-              </Text>
-              <Text className="text-slate-400 text-sm leading-relaxed">
-                Nosso time costuma responder em até 2 horas úteis
-              </Text>
-            </View>
-          </View>
+        <View className="mt-12">
+          <Text className="text-white text-xl font-bold text-center mb-6">
+            O que acontece agora?
+          </Text>
 
-          <View className="flex-row items-start">
-            <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
-              <Ionicons name="shield-checkmark" size={24} color="white" />
+          <View className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+            <View className="flex-row items-start mb-6">
+              <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="time" size={24} color="white" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-white font-bold text-base mb-1">
+                  Resposta rápida
+                </Text>
+                <Text className="text-slate-400 text-sm leading-relaxed">
+                  Nosso time costuma responder em até 2 horas úteis
+                </Text>
+              </View>
             </View>
-            <View className="flex-1">
-              <Text className="text-white font-bold text-base mb-1">
-                Sem compromisso
-              </Text>
-              <Text className="text-slate-400 text-sm leading-relaxed">
-                A demonstração é totalmente gratuita e sem obrigação
-              </Text>
+
+            <View className="flex-row items-start">
+              <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="shield-checkmark" size={24} color="white" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-white font-bold text-base mb-1">
+                  Sem compromisso
+                </Text>
+                <Text className="text-slate-400 text-sm leading-relaxed">
+                  A demonstração é totalmente gratuita e sem obrigação
+                </Text>
+              </View>
             </View>
           </View>
         </View>
