@@ -1,17 +1,27 @@
 {
   "expo": {
-    "name": "vibecode",
-    "slug": "vibecode",
-    "scheme": "vibecode",
+    "name": "Command Click",
+    "slug": "commandclick",
+    "scheme": "commandclick",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.commandclick.app"
     },
     "android": {
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.commandclick.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png",
+      "name": "Command Click - Sistema de Checklist Digital",
+      "description": "Transforme sua oficina com checklist digital profissional",
+      "backgroundColor": "#0f172a",
+      "themeColor": "#2563eb"
     }
   }
 }

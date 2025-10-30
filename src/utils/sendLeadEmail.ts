@@ -1,22 +1,13 @@
 import * as MailComposer from "expo-mail-composer";
+import { Platform, Linking } from "react-native";
 import type { LeadFormData } from "../types/form";
 
 /**
  * Sends lead form data via email
- * Uses expo-mail-composer to open the device's email app
+ * Uses expo-mail-composer on mobile and mailto: link on web
  */
 export async function sendLeadEmail(formData: LeadFormData): Promise<boolean> {
   try {
-    // Check if email is available on the device
-    const isAvailable = await MailComposer.isAvailableAsync();
-
-    if (!isAvailable) {
-      console.error("Email is not available on this device");
-      // Fallback: log the data (in production, send to a backend)
-      console.log("Lead form data:", formData);
-      return false;
-    }
-
     // Format the email body with lead information
     const emailBody = `
 Nova Solicitação de Demonstração - Command Click
@@ -45,14 +36,40 @@ Data/Hora: ${new Date().toLocaleString("pt-BR")}
 Este lead foi gerado através da Landing Page do Command Click.
     `.trim();
 
-    // Prepare email options
+    const subject = `🎯 Novo Lead: ${formData.workshopName} - ${formData.city}/${formData.state}`;
+    const recipient = "commandclick.contato@gmail.com";
+
+    // Web platform uses mailto: link
+    if (Platform.OS === "web") {
+      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+
+      // Open mailto link in new window
+      if (typeof window !== "undefined") {
+        window.location.href = mailtoUrl;
+      } else {
+        await Linking.openURL(mailtoUrl);
+      }
+
+      return true;
+    }
+
+    // Mobile platforms use expo-mail-composer
+    const isAvailable = await MailComposer.isAvailableAsync();
+
+    if (!isAvailable) {
+      console.error("Email is not available on this device");
+      console.log("Lead form data:", formData);
+      return false;
+    }
+
+    // Prepare email options for mobile
     const options: MailComposer.MailComposerOptions = {
-      recipients: ["commandclick.contato@gmail.com"],
-      subject: `🎯 Novo Lead: ${formData.workshopName} - ${formData.city}/${formData.state}`,
+      recipients: [recipient],
+      subject: subject,
       body: emailBody,
     };
 
-    // Open email composer
+    // Open email composer on mobile
     await MailComposer.composeAsync(options);
 
     return true;
