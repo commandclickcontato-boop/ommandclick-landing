@@ -150,6 +150,17 @@ A logo completa (com o ícone do cursor em mira + texto "COMMAND CLICK") está s
 
 Arquivo: `assets/images/command-click-logo-full.png`
 
+## 📧 Captura de Leads
+
+**Status:** ✅ Sistema de envio por email implementado!
+
+Quando um lead preenche o formulário, os dados são enviados para:
+**Email:** `commandclick.contato@gmail.com`
+
+O app abre automaticamente o cliente de email nativo com todos os dados formatados.
+
+📄 **Documentação completa:** Veja `LEAD_CAPTURE.md` para detalhes.
+
 ## Próximos Passos
 
 Para produção, considere:
@@ -163,3 +174,4 @@ Para produção, considere:
 ## Contato
 
 WhatsApp de suporte: **+55 13 98211-1925**
+Email para leads: **commandclick.contato@gmail.com**

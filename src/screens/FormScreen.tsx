@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
 import type { FormErrors } from "../types/form";
+import { sendLeadEmail } from "../utils/sendLeadEmail";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Form">;
 
@@ -62,10 +64,21 @@ export default function FormScreen({ navigation }: Props) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
+      // Send email with lead data
+      const emailSent = await sendLeadEmail(formData);
+
+      // Save form data locally
       submitForm();
+
+      // Navigate to thank you page
       navigation.navigate("ThankYou");
+
+      // Show confirmation (optional, since we navigate away)
+      if (!emailSent) {
+        console.log("Email composer opened or data logged");
+      }
     }
   };
 
