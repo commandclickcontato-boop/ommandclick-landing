@@ -93,7 +93,7 @@ export default function ThankYouScreen({ navigation }: Props) {
                   Teste sem custo
                 </Text>
                 <Text className="text-slate-400 text-sm leading-relaxed">
-                  Conheça o sistema sem investimento inicial
+                  Demonstração 100% gratuita
                 </Text>
               </View>
             </View>
