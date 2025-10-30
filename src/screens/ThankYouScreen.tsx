@@ -64,36 +64,36 @@ export default function ThankYouScreen({ navigation }: Props) {
         </Pressable>
 
         {/* Additional Info */}
-        <View className="mt-12 px-2">
+        <View className="mt-12 px-4">
           <Text className="text-white text-xl font-bold text-center mb-6">
             O que acontece agora?
           </Text>
 
-          <View className="bg-slate-800 px-6 pt-10 pb-14 rounded-2xl border border-slate-700 min-h-[280px]">
-            <View className="flex-row items-center mb-10">
-              <View className="bg-blue-600 w-14 h-14 rounded-2xl items-center justify-center mr-5 flex-shrink-0">
-                <Ionicons name="time" size={26} color="white" />
+          <View className="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+            <View className="flex-row items-start mb-8">
+              <View className="bg-blue-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
+                <Ionicons name="time" size={24} color="white" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-lg mb-2">
+                <Text className="text-white font-bold text-base mb-2">
                   Resposta rápida
                 </Text>
-                <Text className="text-slate-300 text-sm leading-relaxed">
-                  Nosso time responde em até 2 horas úteis
+                <Text className="text-slate-400 text-sm leading-relaxed">
+                  Resposta em até 2 horas
                 </Text>
               </View>
             </View>
 
-            <View className="flex-row items-center">
-              <View className="bg-green-600 w-14 h-14 rounded-2xl items-center justify-center mr-5 flex-shrink-0">
-                <Ionicons name="shield-checkmark" size={26} color="white" />
+            <View className="flex-row items-start">
+              <View className="bg-green-600 w-12 h-12 rounded-xl items-center justify-center mr-4 flex-shrink-0">
+                <Ionicons name="shield-checkmark" size={24} color="white" />
               </View>
               <View className="flex-1">
-                <Text className="text-white font-bold text-lg mb-2">
-                  Teste sem custo
+                <Text className="text-white font-bold text-base mb-2">
+                  100% gratuito
                 </Text>
-                <Text className="text-slate-300 text-sm leading-relaxed">
-                  Demonstração 100% gratuita
+                <Text className="text-slate-400 text-sm leading-relaxed">
+                  Demonstração sem custo
                 </Text>
               </View>
             </View>
