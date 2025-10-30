@@ -90,10 +90,10 @@ export default function ThankYouScreen({ navigation }: Props) {
               </View>
               <View className="flex-1">
                 <Text className="text-white font-bold text-base mb-1">
-                  Sem compromisso
+                  Teste sem custo
                 </Text>
                 <Text className="text-slate-400 text-sm leading-relaxed">
-                  A demonstração é totalmente gratuita e sem obrigação
+                  Conheça o sistema sem nenhum investimento inicial
                 </Text>
               </View>
             </View>

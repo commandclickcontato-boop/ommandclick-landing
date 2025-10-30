@@ -63,7 +63,7 @@ export default function HomeScreen({ navigation }: Props) {
             <View className="flex-row items-center">
               <Ionicons name="checkmark-circle" size={16} color="#10b981" />
               <Text className="text-slate-400 text-sm ml-1">
-                Sem compromisso
+                Demonstração gratuita
               </Text>
             </View>
             <Text className="text-slate-600">•</Text>
