@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log('📊 Injecting Meta Pixel and loading indicator into HTML...');
+console.log('📊 Injecting Meta Pixel and fixing script tags...');
 
 const htmlPath = path.join(__dirname, 'dist', 'index.html');
 
@@ -110,7 +110,13 @@ const loadingScript = `
 // Inject before </head>
 html = html.replace('</head>', `${metaPixelCode}${loadingScript}</head>`);
 
+// FIX: Change script tag from defer to type="module"
+html = html.replace(
+  /<script src="([^"]*)" defer><\/script>/g,
+  '<script type="module" src="$1"></script>'
+);
+
 // Write back
 fs.writeFileSync(htmlPath, html, 'utf8');
 
-console.log('✅ Meta Pixel and loading indicator injected successfully!');
+console.log('✅ Meta Pixel, loading indicator, and module fix applied!');
