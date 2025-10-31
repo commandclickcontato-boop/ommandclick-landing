@@ -25,14 +25,20 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
   error?: string;
 }> {
   try {
+    console.log("[EmailService] Starting email send...");
+
     // Get EmailJS credentials from environment
     const serviceId = process.env.EXPO_PUBLIC_EMAILJS_SERVICE_ID;
     const templateId = process.env.EXPO_PUBLIC_EMAILJS_TEMPLATE_ID;
     const publicKey = process.env.EXPO_PUBLIC_EMAILJS_PUBLIC_KEY;
 
+    console.log("[EmailService] Service ID:", serviceId ? "✓" : "✗");
+    console.log("[EmailService] Template ID:", templateId ? "✓" : "✗");
+    console.log("[EmailService] Public Key:", publicKey ? "✓" : "✗");
+
     // Validate environment variables
     if (!serviceId || !templateId || !publicKey) {
-      console.error("Missing EmailJS configuration");
+      console.error("[EmailService] Missing EmailJS configuration");
       return {
         success: false,
         error: "Configuração de email não encontrada. Por favor, configure as variáveis de ambiente.",
@@ -66,6 +72,9 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
       }),
     };
 
+    console.log("[EmailService] Template params prepared");
+    console.log("[EmailService] Calling EmailJS API...");
+
     // Send email via EmailJS API
     const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
       method: "POST",
@@ -80,9 +89,12 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
       }),
     });
 
+    console.log("[EmailService] Response status:", response.status);
+    console.log("[EmailService] Response ok:", response.ok);
+
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("EmailJS API error:", errorText);
+      console.error("[EmailService] EmailJS API error:", errorText);
       return {
         success: false,
         error: "Erro ao enviar email. Por favor, tente novamente.",
@@ -90,19 +102,20 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
     }
 
     const result: EmailJSResponse = await response.json();
+    console.log("[EmailService] Result:", result);
 
     if (result.status === 200) {
-      console.log("✅ Lead email sent successfully");
+      console.log("[EmailService] ✅ Lead email sent successfully");
       return { success: true };
     } else {
-      console.error("EmailJS error:", result);
+      console.error("[EmailService] EmailJS error:", result);
       return {
         success: false,
         error: "Erro no envio. Por favor, tente novamente.",
       };
     }
   } catch (error) {
-    console.error("Failed to send lead email:", error);
+    console.error("[EmailService] Failed to send lead email:", error);
     return {
       success: false,
       error: "Erro de conexão. Verifique sua internet e tente novamente.",

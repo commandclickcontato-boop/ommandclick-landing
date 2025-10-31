@@ -81,12 +81,23 @@ export default function FormScreen({ navigation }: Props) {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      Alert.alert(
+        "Campos obrigatórios",
+        "Por favor, preencha todos os campos obrigatórios.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
+      console.log("[FormScreen] Starting form submission...");
+      console.log("[FormScreen] Form data:", JSON.stringify(formData, null, 2));
+
       // Track lead conversion with Meta Pixel (browser + API)
+      console.log("[FormScreen] Tracking lead with Meta Pixel...");
       await trackLeadDual({
         fullName: formData.fullName,
         workshopName: formData.workshopName,
@@ -94,12 +105,16 @@ export default function FormScreen({ navigation }: Props) {
         state: formData.state,
         whatsapp: formData.whatsapp,
       });
+      console.log("[FormScreen] Meta Pixel tracking complete");
 
       // Send email with lead data using professional email service
+      console.log("[FormScreen] Sending email...");
       const emailResult = await sendLeadEmail(formData);
+      console.log("[FormScreen] Email result:", emailResult);
 
       if (!emailResult.success) {
         // Show error to user
+        console.error("[FormScreen] Email failed:", emailResult.error);
         Alert.alert(
           "Erro no envio",
           emailResult.error || "Não foi possível enviar seus dados. Por favor, tente novamente.",
@@ -110,18 +125,20 @@ export default function FormScreen({ navigation }: Props) {
       }
 
       // Save form data locally
+      console.log("[FormScreen] Saving form data locally...");
       submitForm();
+      console.log("[FormScreen] Form data saved");
 
       // Navigate to thank you page
+      console.log("[FormScreen] Navigating to ThankYou page...");
       navigation.navigate("ThankYou");
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("[FormScreen] Error submitting form:", error);
       Alert.alert(
         "Erro inesperado",
         "Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.",
         [{ text: "OK" }]
       );
-    } finally {
       setIsSubmitting(false);
     }
   };
