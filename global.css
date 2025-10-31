@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 /* Prevent overscroll/bounce effect on mobile */
+html {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+  -webkit-text-size-adjust: 100%;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -15,8 +22,9 @@ html, body {
 
 /* Prevent horizontal scroll */
 body {
-  position: relative;
+  position: fixed;
   min-height: 100vh;
+  touch-action: pan-y;
 }
 
 /* Fix for React Native Web */
@@ -25,4 +33,15 @@ body {
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: none;
+}
+
+/* Prevent zoom on double tap and input focus */
+* {
+  touch-action: manipulation;
+}
+
+input, textarea, select {
+  font-size: 16px !important;
 }
