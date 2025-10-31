@@ -21,6 +21,7 @@ export default function ResponsiveContainer({
   return (
     <View
       style={{
+        flex: 1,
         width: "100%",
         alignSelf: "center",
         maxWidth: isDesktop ? maxWidth : "100%",
