@@ -16,7 +16,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
 import type { FormErrors } from "../types/form";
-import { sendLeadEmail } from "../api/emailService";
+import { sendLeadEmail } from "../utils/sendLeadEmail";
 import ResponsiveContainer from "../components/ResponsiveContainer";
 import { trackPageView, trackFormStart, trackLeadDual } from "../utils/metaPixel";
 

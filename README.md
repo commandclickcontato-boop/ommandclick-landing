@@ -211,7 +211,7 @@ O sistema usa **Resend API** para enviar emails automaticamente quando um lead p
 
 **Email de destino:** `commandclick.contato@gmail.com`
 
-📄 **Código da API:** `src/api/emailService.ts`
+📄 **Código da API:** `src/utils/sendLeadEmail.ts`
 
 ## Próximos Passos
 
