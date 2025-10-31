@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }: Props) {
     <MechanicBackground>
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: insets.bottom }}
+        contentContainerStyle={{ paddingBottom: 0 }}
         bounces={false}
         overScrollMode="never"
         showsVerticalScrollIndicator={false}
