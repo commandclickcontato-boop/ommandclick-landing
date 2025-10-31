@@ -152,41 +152,65 @@ Arquivo: `assets/images/command-click-logo-full.png`
 
 ## 📧 Captura de Leads
 
-**Status:** ✅ Sistema profissional de envio por email implementado!
+**Status:** ✅ Sistema profissional de envio por email implementado com Resend!
 
 ### Como Funciona
 
-O sistema usa **EmailJS** para enviar emails automaticamente quando um lead preenche o formulário. Funciona perfeitamente em:
+O sistema usa **Resend API** para enviar emails automaticamente quando um lead preenche o formulário. Funciona perfeitamente em:
 - ✅ **Desktop/Web**: Envia direto sem precisar abrir cliente de email
 - ✅ **Mobile (iOS/Android)**: Envia em background, sem interação do usuário
-- ✅ **Confiável**: Confirmação real de envio + feedback visual
+- ✅ **Confiável**: API moderna e robusta com confirmação real de envio
+- ✅ **Email HTML profissional**: Design bonito com gradientes e seções organizadas
 
 ### Configuração Necessária
 
-**⚠️ IMPORTANTE**: Para o sistema funcionar, você precisa configurar as credenciais do EmailJS.
+**⚠️ IMPORTANTE**: Para o sistema funcionar, você precisa configurar o Resend.
 
-📄 **Guia completo de configuração**: Veja `EMAILJS_SETUP.md` para instruções detalhadas passo a passo.
+**Passo a passo:**
 
-**Resumo rápido:**
-1. Criar conta no EmailJS (grátis até 200 emails/mês)
-2. Conectar seu Gmail
-3. Criar template de email
-4. Adicionar 3 variáveis de ambiente na aba ENV do Vibecode:
-   - `EXPO_PUBLIC_EMAILJS_SERVICE_ID`
-   - `EXPO_PUBLIC_EMAILJS_TEMPLATE_ID`
-   - `EXPO_PUBLIC_EMAILJS_PUBLIC_KEY`
+1. **Criar conta no Resend** (gratuito)
+   - Acesse: https://resend.com/
+   - Faça sign up com seu email
+
+2. **Gerar API Key**
+   - No dashboard do Resend, vá em "API Keys"
+   - Clique em "Create API Key"
+   - Copie a key (começa com `re_...`)
+
+3. **Adicionar variáveis de ambiente**
+   - Na aba **ENV** do Vibecode, adicione:
+
+   ```
+   EXPO_PUBLIC_RESEND_API_KEY=re_sua_api_key_aqui
+   EXPO_PUBLIC_RESEND_FROM_EMAIL=onboarding@resend.dev
+   ```
+
+   **Nota:** O email `onboarding@resend.dev` é fornecido automaticamente pelo Resend para testes. Para usar seu próprio domínio, você precisa verificá-lo no dashboard do Resend.
+
+4. **Testar o envio**
+   - Preencha o formulário na landing page
+   - Verifique os logs na aba LOGS do Vibecode
+   - O email será enviado para `commandclick.contato@gmail.com`
 
 ### Recursos
 
-- **Email formatado em HTML** com design profissional
+- **Email formatado em HTML** com design profissional e gradientes
 - **Feedback visual** para o usuário (botão "Enviando...")
 - **Mensagens de erro claras** se algo falhar
-- **Tracking do Meta Pixel** integrado
+- **Logs detalhados** para debug
 - **Dados salvos localmente** como backup
+- **Email responsivo** que funciona em todos os clientes de email
+
+### Vantagens do Resend
+
+- ✅ Mais simples que EmailJS (apenas 1 API key)
+- ✅ Mais confiável e rápido
+- ✅ Melhor deliverability (taxa de entrega)
+- ✅ API moderna e bem documentada
+- ✅ 100 emails/dia no plano gratuito
 
 **Email de destino:** `commandclick.contato@gmail.com`
 
-📄 **Guia completo:** `EMAILJS_SETUP.md`
 📄 **Código da API:** `src/api/emailService.ts`
 
 ## Próximos Passos

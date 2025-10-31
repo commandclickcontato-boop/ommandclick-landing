@@ -2,22 +2,24 @@ import type { LeadFormData } from "../types/form";
 
 /**
  * Professional Email Service for Lead Capture
- * Uses EmailJS for reliable email delivery across all platforms
+ * Uses Resend API for reliable email delivery across all platforms
  *
  * Setup required:
- * 1. Create account at https://www.emailjs.com/
- * 2. Add email service (Gmail, Outlook, etc.)
- * 3. Create email template
- * 4. Add credentials to .env file
+ * 1. Create account at https://resend.com/
+ * 2. Generate API key
+ * 3. Add EXPO_PUBLIC_RESEND_API_KEY to .env file
+ * 4. Add EXPO_PUBLIC_RESEND_FROM_EMAIL to .env (e.g., onboarding@resend.dev)
  */
 
-interface EmailJSResponse {
-  status: number;
-  text: string;
+interface ResendEmailPayload {
+  from: string;
+  to: string[];
+  subject: string;
+  html: string;
 }
 
 /**
- * Send lead data via EmailJS API
+ * Send lead data via Resend API
  * Works on web, iOS, and Android without native mail client
  */
 export async function sendLeadEmail(formData: LeadFormData): Promise<{
@@ -25,23 +27,23 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
   error?: string;
 }> {
   try {
-    console.log("[EmailService] Starting email send...");
+    console.log("[EmailService] Starting email send with Resend...");
 
-    // Get EmailJS credentials from environment
-    const serviceId = process.env.EXPO_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateId = process.env.EXPO_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const publicKey = process.env.EXPO_PUBLIC_EMAILJS_PUBLIC_KEY;
+    // Get Resend credentials from environment
+    const resendApiKey = process.env.EXPO_PUBLIC_RESEND_API_KEY;
+    const fromEmail = process.env.EXPO_PUBLIC_RESEND_FROM_EMAIL || "onboarding@resend.dev";
+    const toEmail = "commandclick.contato@gmail.com";
 
-    console.log("[EmailService] Service ID:", serviceId ? "✓" : "✗");
-    console.log("[EmailService] Template ID:", templateId ? "✓" : "✗");
-    console.log("[EmailService] Public Key:", publicKey ? "✓" : "✗");
+    console.log("[EmailService] API Key:", resendApiKey ? "✓" : "✗");
+    console.log("[EmailService] From Email:", fromEmail);
+    console.log("[EmailService] To Email:", toEmail);
 
     // Validate environment variables
-    if (!serviceId || !templateId || !publicKey) {
-      console.error("[EmailService] Missing EmailJS configuration");
+    if (!resendApiKey) {
+      console.error("[EmailService] Missing Resend API key");
       return {
         success: false,
-        error: "Configuração de email não encontrada. Por favor, configure as variáveis de ambiente.",
+        error: "Configuração de email não encontrada. Configure EXPO_PUBLIC_RESEND_API_KEY.",
       };
     }
 
@@ -49,45 +51,103 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
     const contactTime =
       formData.preferredContactTime === "morning" ? "Manhã" : "Tarde";
 
-    // Prepare email template parameters
-    const templateParams = {
-      to_email: "commandclick.contato@gmail.com",
-      from_name: formData.fullName,
-      subject: `🎯 Novo Lead: ${formData.workshopName} - ${formData.city}/${formData.state}`,
+    // Create HTML email body
+    const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+    .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .section-title { color: #667eea; font-size: 18px; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+    .info-row { display: flex; margin-bottom: 12px; }
+    .label { font-weight: bold; width: 180px; color: #555; }
+    .value { color: #333; }
+    .footer { text-align: center; color: #888; font-size: 12px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="margin: 0;">🎯 Novo Lead Command Click</h1>
+      <p style="margin: 10px 0 0 0;">${formData.workshopName}</p>
+    </div>
 
-      // Lead information
-      full_name: formData.fullName,
-      workshop_name: formData.workshopName,
-      city: formData.city,
-      state: formData.state,
-      number_of_mechanics: formData.numberOfMechanics,
-      whatsapp: formData.whatsapp,
-      contact_time: contactTime,
-      accepts_marketing: formData.acceptsMarketing ? "Sim" : "Não",
+    <div class="content">
+      <div class="section">
+        <div class="section-title">👤 Informações de Contato</div>
+        <div class="info-row">
+          <span class="label">Nome Completo:</span>
+          <span class="value">${formData.fullName}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">WhatsApp:</span>
+          <span class="value">${formData.whatsapp}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Melhor Horário:</span>
+          <span class="value">${contactTime}</span>
+        </div>
+      </div>
 
-      // Metadata
-      submission_date: new Date().toLocaleString("pt-BR", {
-        dateStyle: "full",
-        timeStyle: "short",
-      }),
-    };
+      <div class="section">
+        <div class="section-title">🏢 Informações da Oficina</div>
+        <div class="info-row">
+          <span class="label">Nome da Oficina:</span>
+          <span class="value">${formData.workshopName}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Localização:</span>
+          <span class="value">${formData.city}, ${formData.state}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Número de Mecânicos:</span>
+          <span class="value">${formData.numberOfMechanics}</span>
+        </div>
+      </div>
 
-    console.log("[EmailService] Template params prepared");
-    console.log("[EmailService] Calling proxy API...");
+      <div class="section">
+        <div class="section-title">📊 Informações Adicionais</div>
+        <div class="info-row">
+          <span class="label">Aceita Marketing:</span>
+          <span class="value">${formData.acceptsMarketing ? "✅ Sim" : "❌ Não"}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Data/Hora:</span>
+          <span class="value">${new Date().toLocaleString("pt-BR", {
+            dateStyle: "full",
+            timeStyle: "short",
+          })}</span>
+        </div>
+      </div>
+    </div>
 
-    // Use proxy endpoint to send email (works on mobile and web)
-    const apiEndpoint = "https://ommandclick-landing.vercel.app/api/send-email";
+    <div class="footer">
+      <p>Este lead foi gerado através da Landing Page do Command Click</p>
+    </div>
+  </div>
+</body>
+</html>
+    `.trim();
 
-    const response = await fetch(apiEndpoint, {
+    console.log("[EmailService] Calling Resend API...");
+
+    // Call Resend API
+    const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
+        "Authorization": `Bearer ${resendApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        serviceId,
-        templateId,
-        publicKey,
-        templateParams,
+        from: fromEmail,
+        to: [toEmail],
+        subject: `🎯 Novo Lead: ${formData.workshopName} - ${formData.city}/${formData.state}`,
+        html: htmlBody,
       }),
     });
 
@@ -96,26 +156,17 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("[EmailService] API error:", errorData);
+      console.error("[EmailService] Resend API error:", errorData);
       return {
         success: false,
-        error: "Erro ao enviar email. Por favor, tente novamente.",
+        error: `Erro ao enviar email: ${errorData.message || "Tente novamente"}`,
       };
     }
 
     const result = await response.json();
-    console.log("[EmailService] Result:", result);
+    console.log("[EmailService] Email sent successfully! ID:", result.id);
 
-    if (result.success) {
-      console.log("[EmailService] ✅ Lead email sent successfully");
-      return { success: true };
-    } else {
-      console.error("[EmailService] Email send failed:", result);
-      return {
-        success: false,
-        error: "Erro no envio. Por favor, tente novamente.",
-      };
-    }
+    return { success: true };
   } catch (error) {
     console.error("[EmailService] Failed to send lead email:", error);
     return {
