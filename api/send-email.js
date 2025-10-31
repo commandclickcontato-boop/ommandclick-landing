@@ -1,74 +1,51 @@
-import { Platform } from "react-native";
-import type { LeadFormData } from "../types/form";
-
 /**
- * Professional Email Service for Lead Capture
- * Uses Resend API via Vercel serverless function to avoid CORS issues
+ * Vercel Serverless Function to send emails via Resend
+ * This bypasses CORS issues when calling Resend from the browser
  */
 
-/**
- * Send lead data via Resend API
- * On web: Uses Vercel serverless function
- * On mobile: Calls Resend API directly
- */
-export async function sendLeadEmail(formData: LeadFormData): Promise<{
-  success: boolean;
-  error?: string;
-}> {
+export default async function handler(req, res) {
+  // Add CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight request
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  // Only allow POST requests
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
-    console.log("[EmailService] Starting email send...");
+    const { formData } = req.body;
 
-    // On web, use Vercel serverless function to avoid CORS
-    if (Platform.OS === "web") {
-      console.log("[EmailService] Using Vercel API route for web...");
-
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ formData }),
+    // Validate input
+    if (!formData) {
+      console.error("Missing formData");
+      return res.status(400).json({
+        success: false,
+        error: "Dados do formulário não encontrados"
       });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        console.log("[EmailService] Email sent successfully via Vercel API!");
-        return { success: true };
-      } else {
-        console.error("[EmailService] Error from Vercel API:", result);
-        return {
-          success: false,
-          error: result.error || "Erro ao enviar email. Tente novamente.",
-        };
-      }
     }
 
-    // For mobile, call Resend API directly
-    console.log("[EmailService] Using direct Resend API for mobile...");
-
-    const resendApiKey = (process.env.EXPO_PUBLIC_RESEND_API_KEY as string | undefined)?.trim();
-    const fromEmail = ((process.env.EXPO_PUBLIC_RESEND_FROM_EMAIL as string) || "onboarding@resend.dev").trim();
+    // Get Resend API key from environment
+    const resendApiKey = process.env.EXPO_PUBLIC_RESEND_API_KEY;
+    const fromEmail = process.env.EXPO_PUBLIC_RESEND_FROM_EMAIL || "onboarding@resend.dev";
     const toEmail = "commandclick.contato@gmail.com";
 
-    console.log("[EmailService] API Key:", resendApiKey ? "✓" : "✗");
-    console.log("[EmailService] API Key length:", resendApiKey?.length || 0);
-    console.log("[EmailService] API Key starts with 're_':", resendApiKey?.startsWith("re_") || false);
-    console.log("[EmailService] From Email:", fromEmail);
-    console.log("[EmailService] To Email:", toEmail);
-
-    // Validate environment variables
     if (!resendApiKey) {
-      console.error("[EmailService] Missing Resend API key");
-      return {
+      console.error("Missing Resend API key");
+      return res.status(500).json({
         success: false,
-        error: "Configuração de email não encontrada. Configure EXPO_PUBLIC_RESEND_API_KEY.",
-      };
+        error: "Configuração de email não encontrada"
+      });
     }
 
     // Format contact time
-    const contactTime =
-      formData.preferredContactTime === "morning" ? "Manhã" : "Tarde";
+    const contactTime = formData.preferredContactTime === "morning" ? "Manhã" : "Tarde";
 
     // Create HTML email body
     const htmlBody = `
@@ -153,7 +130,7 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
 </html>
     `.trim();
 
-    console.log("[EmailService] Calling Resend API...");
+    console.log("Calling Resend API...");
 
     // Call Resend API
     const response = await fetch("https://api.resend.com/emails", {
@@ -170,55 +147,27 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
       }),
     });
 
-    console.log("[EmailService] Response status:", response.status);
-    console.log("[EmailService] Response ok:", response.ok);
+    console.log("Resend response status:", response.status);
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("[EmailService] Resend API error:", errorData);
-      return {
+      console.error("Resend API error:", errorData);
+      return res.status(response.status).json({
         success: false,
-        error: `Erro ao enviar email: ${errorData.message || "Tente novamente"}`,
-      };
+        error: `Erro ao enviar email: ${errorData.message || "Tente novamente"}`
+      });
     }
 
     const result = await response.json();
-    console.log("[EmailService] Email sent successfully! ID:", result.id);
+    console.log("Email sent successfully! ID:", result.id);
 
-    return { success: true };
+    return res.status(200).json({ success: true, result });
   } catch (error) {
-    console.error("[EmailService] Failed to send lead email:", error);
-    return {
+    console.error("Error in send-email API:", error);
+    return res.status(500).json({
       success: false,
       error: "Erro de conexão. Verifique sua internet e tente novamente.",
-    };
+      details: error.message
+    });
   }
-}
-
-/**
- * Fallback: Format lead data for WhatsApp message
- * Use this if email service fails
- */
-export function formatLeadForWhatsApp(formData: LeadFormData): string {
-  const contactTime =
-    formData.preferredContactTime === "morning" ? "Manhã" : "Tarde";
-
-  return `*Nova Demonstração - Command Click*
-
-*Dados do Lead:*
-👤 Nome: ${formData.fullName}
-🏢 Oficina: ${formData.workshopName}
-📍 Local: ${formData.city}/${formData.state}
-👨‍🔧 Mecânicos: ${formData.numberOfMechanics}
-📱 WhatsApp: ${formData.whatsapp}
-⏰ Horário: ${contactTime}`;
-}
-
-/**
- * Send lead data directly to WhatsApp (backup method)
- */
-export function sendLeadToWhatsApp(formData: LeadFormData): string {
-  const message = formatLeadForWhatsApp(formData);
-  const whatsappNumber = "5513982111925"; // Command Click WhatsApp
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
