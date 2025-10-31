@@ -149,6 +149,15 @@ export async function sendConversionEvent(
   try {
     const url = `https://graph.facebook.com/v18.0/${META_PIXEL_ID}/events`;
 
+    // Safely get location and user agent based on platform
+    const eventSourceUrl = Platform.OS === "web" && typeof window !== "undefined" && window.location
+      ? window.location.href
+      : "app://mobile";
+
+    const userAgent = Platform.OS === "web" && typeof navigator !== "undefined"
+      ? navigator.userAgent
+      : `React-Native/${Platform.OS}`;
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -159,10 +168,10 @@ export async function sendConversionEvent(
           {
             event_name: eventName,
             event_time: Math.floor(Date.now() / 1000),
-            action_source: "website",
-            event_source_url: typeof window !== "undefined" ? window.location.href : "",
+            action_source: Platform.OS === "web" ? "website" : "app",
+            event_source_url: eventSourceUrl,
             user_data: {
-              client_user_agent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+              client_user_agent: userAgent,
             },
             custom_data: eventData,
           },
