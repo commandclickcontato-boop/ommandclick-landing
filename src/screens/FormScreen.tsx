@@ -157,6 +157,9 @@ export default function FormScreen({ navigation }: Props) {
           className="flex-1"
           contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
           keyboardShouldPersistTaps="handled"
+          bounces={false}
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
         >
           <ResponsiveContainer maxWidth={800}>
             {/* Header */}

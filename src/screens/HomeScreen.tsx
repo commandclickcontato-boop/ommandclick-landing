@@ -36,6 +36,9 @@ export default function HomeScreen({ navigation }: Props) {
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        bounces={false}
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}
       >
         <ResponsiveContainer>
         {/* Hero Section */}
