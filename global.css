@@ -47,10 +47,19 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  max-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
   background-color: #0f172a;
+}
+
+/* Desktop: Allow content to determine height */
+@media (min-width: 769px) {
+  #root {
+    min-height: auto;
+    max-height: none;
+  }
 }
 
 /* Prevent zoom on double tap and input focus */

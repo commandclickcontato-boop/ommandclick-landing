@@ -100,11 +100,25 @@
         overflow-y: auto;
         overflow-x: hidden;
         height: 100vh;
+        max-height: 100vh;
         width: 100vw;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: none;
         position: relative;
         background-color: #0f172a;
+      }
+
+      /* Desktop: Content-based height */
+      @media (min-width: 769px) {
+        html, body {
+          height: auto;
+        }
+
+        #root {
+          height: auto;
+          max-height: none;
+          min-height: 100vh;
+        }
       }
 
       /* Prevent zoom on input focus */
