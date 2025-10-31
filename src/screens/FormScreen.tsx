@@ -155,7 +155,7 @@ export default function FormScreen({ navigation }: Props) {
       <View className="flex-1">
         <ScrollView
           className="flex-1"
-          contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+          contentContainerStyle={{ paddingBottom: insets.bottom }}
           keyboardShouldPersistTaps="handled"
           bounces={false}
           overScrollMode="never"
