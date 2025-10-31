@@ -6,8 +6,8 @@
 html {
   overflow: hidden;
   overscroll-behavior: none;
-  touch-action: pan-y;
   -webkit-text-size-adjust: 100%;
+  background-color: #0f172a;
 }
 
 html, body {
@@ -18,13 +18,28 @@ html, body {
   overflow-x: hidden;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
+  background-color: #0f172a;
 }
 
-/* Prevent horizontal scroll */
-body {
-  position: fixed;
-  min-height: 100vh;
-  touch-action: pan-y;
+/* Mobile: Fixed positioning to prevent overscroll */
+@media (max-width: 768px) {
+  html {
+    touch-action: pan-y;
+  }
+
+  body {
+    position: fixed;
+    min-height: 100vh;
+    touch-action: pan-y;
+  }
+}
+
+/* Desktop: Normal flow to prevent white space at bottom */
+@media (min-width: 769px) {
+  body {
+    position: relative;
+    min-height: 100vh;
+  }
 }
 
 /* Fix for React Native Web */
@@ -35,6 +50,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: none;
+  background-color: #0f172a;
 }
 
 /* Prevent zoom on double tap and input focus */

@@ -70,14 +70,28 @@
         overflow: hidden;
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
         width: 100vw;
         height: 100vh;
-        touch-action: pan-y;
+      }
+
+      /* Mobile: Fixed positioning */
+      @media (max-width: 768px) {
+        body {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          touch-action: pan-y;
+        }
+      }
+
+      /* Desktop: Relative positioning */
+      @media (min-width: 769px) {
+        body {
+          position: relative;
+          min-height: 100vh;
+        }
       }
 
       #root {
