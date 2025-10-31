@@ -73,19 +73,21 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
     };
 
     console.log("[EmailService] Template params prepared");
-    console.log("[EmailService] Calling EmailJS API...");
+    console.log("[EmailService] Calling proxy API...");
 
-    // Send email via EmailJS API
-    const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    // Use proxy endpoint to send email (works on mobile and web)
+    const apiEndpoint = "https://ommandclick-landing.vercel.app/api/send-email";
+
+    const response = await fetch(apiEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        service_id: serviceId,
-        template_id: templateId,
-        user_id: publicKey,
-        template_params: templateParams,
+        serviceId,
+        templateId,
+        publicKey,
+        templateParams,
       }),
     });
 
@@ -93,22 +95,22 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
     console.log("[EmailService] Response ok:", response.ok);
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[EmailService] EmailJS API error:", errorText);
+      const errorData = await response.json();
+      console.error("[EmailService] API error:", errorData);
       return {
         success: false,
         error: "Erro ao enviar email. Por favor, tente novamente.",
       };
     }
 
-    const result: EmailJSResponse = await response.json();
+    const result = await response.json();
     console.log("[EmailService] Result:", result);
 
-    if (result.status === 200) {
+    if (result.success) {
       console.log("[EmailService] ✅ Lead email sent successfully");
       return { success: true };
     } else {
-      console.error("[EmailService] EmailJS error:", result);
+      console.error("[EmailService] Email send failed:", result);
       return {
         success: false,
         error: "Erro no envio. Por favor, tente novamente.",
