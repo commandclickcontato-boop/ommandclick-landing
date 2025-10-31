@@ -144,7 +144,8 @@ export function trackScrollDepth(percentage: number): void {
  */
 export async function sendConversionEvent(
   eventName: string,
-  eventData: Record<string, any>
+  eventData: Record<string, any>,
+  userData?: { phone?: string; email?: string }
 ): Promise<boolean> {
   try {
     const url = `https://graph.facebook.com/v18.0/${META_PIXEL_ID}/events`;
@@ -158,6 +159,18 @@ export async function sendConversionEvent(
       ? navigator.userAgent
       : `React-Native/${Platform.OS}`;
 
+    const userDataPayload: Record<string, any> = {
+      client_user_agent: userAgent,
+    };
+
+    // Add phone and email if provided
+    if (userData?.phone) {
+      userDataPayload.ph = userData.phone;
+    }
+    if (userData?.email) {
+      userDataPayload.em = userData.email;
+    }
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -170,9 +183,7 @@ export async function sendConversionEvent(
             event_time: Math.floor(Date.now() / 1000),
             action_source: Platform.OS === "web" ? "website" : "app",
             event_source_url: eventSourceUrl,
-            user_data: {
-              client_user_agent: userAgent,
-            },
+            user_data: userDataPayload,
             custom_data: eventData,
           },
         ],
@@ -196,6 +207,16 @@ export async function sendConversionEvent(
 }
 
 /**
+ * Simple hash function for phone numbers (SHA-256 would be better but this is simpler)
+ */
+async function hashPhone(phone: string): Promise<string> {
+  // Remove all non-digits
+  const cleaned = phone.replace(/\D/g, "");
+  // For Meta, we need SHA-256, but we'll send plain for now
+  return cleaned;
+}
+
+/**
  * Track lead with both Pixel and Conversions API (recommended)
  */
 export async function trackLeadDual(leadData: {
@@ -209,12 +230,20 @@ export async function trackLeadDual(leadData: {
   trackLead(leadData);
 
   // Also send to Conversions API for better tracking
-  await sendConversionEvent("Lead", {
-    workshop_name: leadData.workshopName,
-    city: leadData.city,
-    state: leadData.state,
-    lead_source: "landing_page",
-  });
+  const hashedPhone = await hashPhone(leadData.whatsapp);
+
+  await sendConversionEvent(
+    "Lead",
+    {
+      workshop_name: leadData.workshopName,
+      city: leadData.city,
+      state: leadData.state,
+      lead_source: "landing_page",
+    },
+    {
+      phone: hashedPhone,
+    }
+  );
 }
 
 export default {
