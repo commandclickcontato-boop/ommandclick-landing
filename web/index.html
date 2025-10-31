@@ -130,38 +130,98 @@
 
     <!-- Prevent zoom script -->
     <script>
-      // Prevent zoom on mobile
-      document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-      });
+      (function() {
+        'use strict';
 
-      document.addEventListener('gesturechange', function(e) {
-        e.preventDefault();
-      });
+        // Prevent all zoom gestures
+        document.addEventListener('gesturestart', function(e) {
+          e.preventDefault();
+          document.body.style.zoom = 1;
+        });
 
-      document.addEventListener('gestureend', function(e) {
-        e.preventDefault();
-      });
+        document.addEventListener('gesturechange', function(e) {
+          e.preventDefault();
+          document.body.style.zoom = 1;
+        });
 
-      // Reset viewport on zoom
-      let lastTouchEnd = 0;
-      document.addEventListener('touchend', function(event) {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-          event.preventDefault();
+        document.addEventListener('gestureend', function(e) {
+          e.preventDefault();
+          document.body.style.zoom = 1;
+        });
+
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+          const now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        }, false);
+
+        // Prevent pinch zoom with touchmove
+        document.addEventListener('touchmove', function(event) {
+          if (event.scale !== 1) {
+            event.preventDefault();
+          }
+        }, { passive: false });
+
+        // Continuous check to prevent zoom and white space
+        let checking = false;
+        function preventZoomAndWhiteSpace() {
+          if (checking) return;
+          checking = true;
+
+          // Reset zoom
+          document.body.style.zoom = 1;
+
+          // Get all scrollable elements
+          const root = document.getElementById('root');
+          if (root) {
+            // Force max scroll to content height
+            const maxScroll = root.scrollHeight - root.clientHeight;
+            if (root.scrollTop > maxScroll) {
+              root.scrollTop = maxScroll;
+            }
+            if (root.scrollTop < 0) {
+              root.scrollTop = 0;
+            }
+          }
+
+          // Reset body scroll
+          if (document.body.scrollTop > 0) {
+            document.body.scrollTop = 0;
+          }
+          if (document.documentElement.scrollTop > 0) {
+            document.documentElement.scrollTop = 0;
+          }
+
+          checking = false;
         }
-        lastTouchEnd = now;
-      }, false);
 
-      // Force scroll to top on resize (zoom detection)
-      let initialHeight = window.innerHeight;
-      window.addEventListener('resize', function() {
-        if (window.innerHeight !== initialHeight) {
-          // Zoom detected, reset
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
-        }
-      });
+        // Run check every 100ms
+        setInterval(preventZoomAndWhiteSpace, 100);
+
+        // Run on scroll
+        window.addEventListener('scroll', preventZoomAndWhiteSpace, { passive: true });
+
+        // Run on resize (zoom detection)
+        let initialHeight = window.innerHeight;
+        window.addEventListener('resize', function() {
+          preventZoomAndWhiteSpace();
+          if (window.innerHeight !== initialHeight) {
+            // Force reset viewport
+            const viewport = document.querySelector('meta[name=viewport]');
+            if (viewport) {
+              viewport.setAttribute('content',
+                'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover');
+            }
+          }
+        });
+
+        // Initial check when DOM loads
+        document.addEventListener('DOMContentLoaded', preventZoomAndWhiteSpace);
+      })();
     </script>
   </head>
   <body>
