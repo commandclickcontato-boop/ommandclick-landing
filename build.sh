@@ -3,11 +3,7 @@ set -e
 
 echo "🚀 Building Expo Web..."
 
-# Install dependencies
-echo "📦 Installing dependencies..."
-npm install
-
-# Build with expo
+# Build with expo (dependencies already installed by Vercel)
 echo "🔨 Running Expo build..."
 npx expo export --platform web
 
