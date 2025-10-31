@@ -207,13 +207,37 @@ export async function sendConversionEvent(
 }
 
 /**
- * Simple hash function for phone numbers (SHA-256 would be better but this is simpler)
+ * Hash a string using SHA-256 (for Meta Conversions API)
+ */
+async function sha256(text: string): Promise<string> {
+  // Normalize: lowercase and trim
+  const normalized = text.toLowerCase().trim();
+
+  // Check if we're in a web environment with crypto support
+  if (Platform.OS === "web" && typeof window !== "undefined" && window.crypto && window.crypto.subtle) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(normalized);
+    const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    return hashHex;
+  }
+
+  // For mobile, we'll skip hashing for now (or return empty)
+  // The Meta Pixel will still track on web via browser pixel
+  return "";
+}
+
+/**
+ * Hash phone number for Meta API
  */
 async function hashPhone(phone: string): Promise<string> {
-  // Remove all non-digits
+  // Remove all non-digits and add country code if not present
   const cleaned = phone.replace(/\D/g, "");
-  // For Meta, we need SHA-256, but we'll send plain for now
-  return cleaned;
+  const withCountryCode = cleaned.startsWith("55") ? cleaned : `55${cleaned}`;
+
+  // Hash the phone number
+  return await sha256(withCountryCode);
 }
 
 /**
@@ -229,21 +253,29 @@ export async function trackLeadDual(leadData: {
   // Track with browser pixel
   trackLead(leadData);
 
-  // Also send to Conversions API for better tracking
-  const hashedPhone = await hashPhone(leadData.whatsapp);
+  // Also send to Conversions API for better tracking (web only for now)
+  if (Platform.OS === "web") {
+    const hashedPhone = await hashPhone(leadData.whatsapp);
+    console.log("[Meta Conversions API] Phone hash generated:", hashedPhone ? "✓" : "✗");
 
-  await sendConversionEvent(
-    "Lead",
-    {
-      workshop_name: leadData.workshopName,
-      city: leadData.city,
-      state: leadData.state,
-      lead_source: "landing_page",
-    },
-    {
-      phone: hashedPhone,
+    // Only send if we successfully hashed the phone
+    if (hashedPhone) {
+      await sendConversionEvent(
+        "Lead",
+        {
+          workshop_name: leadData.workshopName,
+          city: leadData.city,
+          state: leadData.state,
+          lead_source: "landing_page",
+        },
+        {
+          phone: hashedPhone,
+        }
+      );
+    } else {
+      console.log("[Meta Conversions API] Skipping - unable to hash phone number");
     }
-  );
+  }
 }
 
 export default {
