@@ -33,22 +33,34 @@ export default async function handler(req, res) {
 
     console.log("Forwarding email to EmailJS...");
 
-    // Forward request to EmailJS API
-    const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        service_id: serviceId,
-        template_id: templateId,
-        user_id: publicKey,
-        template_params: templateParams,
-      }),
-    });
+    // Use fetch with error handling (Node 18+ on Vercel has native fetch)
+    let response;
+    let result;
 
-    const result = await response.json();
-    console.log("EmailJS response:", response.status, result);
+    try {
+      response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service_id: serviceId,
+          template_id: templateId,
+          user_id: publicKey,
+          template_params: templateParams,
+        }),
+      });
+
+      result = await response.json();
+      console.log("EmailJS response:", response.status, result);
+    } catch (fetchError) {
+      console.error("Fetch error:", fetchError);
+      return res.status(500).json({
+        success: false,
+        error: "Failed to connect to EmailJS",
+        details: fetchError.message
+      });
+    }
 
     if (response.ok) {
       return res.status(200).json({ success: true, result });
@@ -60,7 +72,8 @@ export default async function handler(req, res) {
     return res.status(500).json({
       success: false,
       error: "Internal server error",
-      details: error.message
+      details: error.message,
+      stack: error.stack
     });
   }
 }
