@@ -30,10 +30,8 @@ export async function sendLeadEmail(formData: LeadFormData): Promise<{
     console.log("[EmailService] Starting email send with Resend...");
 
     // Get Resend credentials from environment
-    // @ts-ignore - Expo injects these at build time
-    const resendApiKey = EXPO_PUBLIC_RESEND_API_KEY;
-    // @ts-ignore - Expo injects these at build time
-    const fromEmail = EXPO_PUBLIC_RESEND_FROM_EMAIL || "onboarding@resend.dev";
+    const resendApiKey = (process.env.EXPO_PUBLIC_RESEND_API_KEY as string | undefined)?.trim();
+    const fromEmail = ((process.env.EXPO_PUBLIC_RESEND_FROM_EMAIL as string) || "onboarding@resend.dev").trim();
     const toEmail = "commandclick.contato@gmail.com";
 
     console.log("[EmailService] API Key:", resendApiKey ? "✓" : "✗");
