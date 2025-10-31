@@ -152,14 +152,42 @@ Arquivo: `assets/images/command-click-logo-full.png`
 
 ## 📧 Captura de Leads
 
-**Status:** ✅ Sistema de envio por email implementado!
+**Status:** ✅ Sistema profissional de envio por email implementado!
 
-Quando um lead preenche o formulário, os dados são enviados para:
-**Email:** `commandclick.contato@gmail.com`
+### Como Funciona
 
-O app abre automaticamente o cliente de email nativo com todos os dados formatados.
+O sistema usa **EmailJS** para enviar emails automaticamente quando um lead preenche o formulário. Funciona perfeitamente em:
+- ✅ **Desktop/Web**: Envia direto sem precisar abrir cliente de email
+- ✅ **Mobile (iOS/Android)**: Envia em background, sem interação do usuário
+- ✅ **Confiável**: Confirmação real de envio + feedback visual
 
-📄 **Documentação completa:** Veja `LEAD_CAPTURE.md` para detalhes.
+### Configuração Necessária
+
+**⚠️ IMPORTANTE**: Para o sistema funcionar, você precisa configurar as credenciais do EmailJS.
+
+📄 **Guia completo de configuração**: Veja `EMAILJS_SETUP.md` para instruções detalhadas passo a passo.
+
+**Resumo rápido:**
+1. Criar conta no EmailJS (grátis até 200 emails/mês)
+2. Conectar seu Gmail
+3. Criar template de email
+4. Adicionar 3 variáveis de ambiente na aba ENV do Vibecode:
+   - `EXPO_PUBLIC_EMAILJS_SERVICE_ID`
+   - `EXPO_PUBLIC_EMAILJS_TEMPLATE_ID`
+   - `EXPO_PUBLIC_EMAILJS_PUBLIC_KEY`
+
+### Recursos
+
+- **Email formatado em HTML** com design profissional
+- **Feedback visual** para o usuário (botão "Enviando...")
+- **Mensagens de erro claras** se algo falhar
+- **Tracking do Meta Pixel** integrado
+- **Dados salvos localmente** como backup
+
+**Email de destino:** `commandclick.contato@gmail.com`
+
+📄 **Guia completo:** `EMAILJS_SETUP.md`
+📄 **Código da API:** `src/api/emailService.ts`
 
 ## Próximos Passos
 

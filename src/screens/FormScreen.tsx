@@ -16,7 +16,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useFormStore } from "../state/formStore";
 import type { FormErrors } from "../types/form";
-import { sendLeadEmail } from "../utils/sendLeadEmail";
+import { sendLeadEmail } from "../api/emailService";
 import ResponsiveContainer from "../components/ResponsiveContainer";
 import { trackPageView, trackFormStart, trackLeadDual } from "../utils/metaPixel";
 
@@ -27,6 +27,7 @@ export default function FormScreen({ navigation }: Props) {
   const { formData, setFormData, submitForm } = useFormStore();
   const [errors, setErrors] = useState<FormErrors>({});
   const [hasStartedForm, setHasStartedForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Track page view when component mounts
   useEffect(() => {
@@ -80,7 +81,11 @@ export default function FormScreen({ navigation }: Props) {
   };
 
   const handleSubmit = async () => {
-    if (validateForm()) {
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+
+    try {
       // Track lead conversion with Meta Pixel (browser + API)
       await trackLeadDual({
         fullName: formData.fullName,
@@ -90,19 +95,34 @@ export default function FormScreen({ navigation }: Props) {
         whatsapp: formData.whatsapp,
       });
 
-      // Send email with lead data
-      const emailSent = await sendLeadEmail(formData);
+      // Send email with lead data using professional email service
+      const emailResult = await sendLeadEmail(formData);
+
+      if (!emailResult.success) {
+        // Show error to user
+        Alert.alert(
+          "Erro no envio",
+          emailResult.error || "Não foi possível enviar seus dados. Por favor, tente novamente.",
+          [{ text: "OK" }]
+        );
+        setIsSubmitting(false);
+        return;
+      }
 
       // Save form data locally
       submitForm();
 
       // Navigate to thank you page
       navigation.navigate("ThankYou");
-
-      // Show confirmation (optional, since we navigate away)
-      if (!emailSent) {
-        console.log("Email composer opened or data logged");
-      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      Alert.alert(
+        "Erro inesperado",
+        "Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.",
+        [{ text: "OK" }]
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -377,10 +397,17 @@ export default function FormScreen({ navigation }: Props) {
               {/* Submit Button */}
               <Pressable
                 onPress={handleSubmit}
-                className="bg-blue-600 py-5 px-8 rounded-xl active:bg-blue-700"
+                disabled={isSubmitting}
+                className={`py-5 px-8 rounded-xl ${
+                  isSubmitting
+                    ? "bg-blue-400"
+                    : "bg-blue-600 active:bg-blue-700"
+                }`}
               >
                 <Text className="text-white text-lg font-bold text-center">
-                  Quero aplicar o sistema na minha oficina
+                  {isSubmitting
+                    ? "Enviando..."
+                    : "Quero aplicar o sistema na minha oficina"}
                 </Text>
               </Pressable>
             </View>
