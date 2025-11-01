@@ -126,8 +126,11 @@ const loadingScript = `
   </script>
 `;
 
-// Inject before </head>
-html = html.replace('</head>', `${metaPixelCode}${loadingScript}</head>`);
+// Inject Meta Pixel before </head>
+html = html.replace('</head>', `${metaPixelCode}</head>`);
+
+// Inject loading script before </body> instead of in head
+html = html.replace('</body>', `${loadingScript}</body>`);
 
 // FIX: Change script tag from defer to type="module"
 html = html.replace(
