@@ -74,12 +74,31 @@ const loadingScript = `
   <script>
     console.log('[CommandClick] HTML loaded');
 
-    // Add loading indicator
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'loading-indicator';
-    loadingDiv.id = 'loading';
-    loadingDiv.innerHTML = '<div class="loading-content"><div class="spinner"></div><h2>Command Click</h2><p>Carregando...</p></div>';
-    document.body.appendChild(loadingDiv);
+    // Add loading indicator when DOM is ready
+    function addLoadingIndicator() {
+      if (!document.body) {
+        // If body is not ready, wait a bit and try again
+        setTimeout(addLoadingIndicator, 10);
+        return;
+      }
+
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'loading-indicator';
+      loadingDiv.id = 'loading';
+      loadingDiv.innerHTML = '<div class="loading-content"><div class="spinner"></div><h2>Command Click</h2><p>Carregando...</p></div>';
+      document.body.appendChild(loadingDiv);
+    }
+
+    // Call immediately or wait for DOMContentLoaded
+    if (document.body) {
+      addLoadingIndicator();
+    } else {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addLoadingIndicator);
+      } else {
+        addLoadingIndicator();
+      }
+    }
 
     // Check if app loaded after 5 seconds
     setTimeout(() => {
