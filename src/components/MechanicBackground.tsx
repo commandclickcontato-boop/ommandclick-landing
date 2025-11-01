@@ -12,7 +12,7 @@ export default function MechanicBackground({
   // Pattern overlay that simulates a mechanic workshop feel
   // without needing an actual image - uses gradients and opacity
   return (
-    <View style={{ flex: 1, backgroundColor: "#0f172a" }}>
+    <View style={{ flex: 1, backgroundColor: "#020617" }}>
       {/* Content with gradient background */}
       <LinearGradient
         colors={["#1e293b", "#0f172a", "#020617"]}

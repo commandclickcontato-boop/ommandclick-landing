@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }: Props) {
     <MechanicBackground>
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 0 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 0 }}
         bounces={false}
         overScrollMode="never"
         showsVerticalScrollIndicator={false}
@@ -313,8 +313,8 @@ export default function HomeScreen({ navigation }: Props) {
           </Pressable>
         </View>
 
-        {/* Footer */}
-        <View className="px-6 py-12 bg-slate-950 border-t border-slate-800">
+        {/* Footer - Final section without any borders or spacing after */}
+        <View className="px-6 pt-12 pb-8 bg-slate-950">
           <View className="items-center mb-6">
             <CommandClickLogo size="medium" />
             <Text className="text-slate-500 text-sm mt-4">
