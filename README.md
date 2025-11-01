@@ -8,7 +8,8 @@ Landing page de alta conversão para o Command Click, um Checklist Digital para 
 - **WhatsApp**: ✅ Atualizado para +55 13 98211-1925
 - **Background**: ✅ Padrão sutil de oficina mecânica com transparência implementado
 - **Design**: Fundo azul escuro profissional com overlays suaves
-- **Footer**: ✅ Ajustado para finalizar sem bordas extras no final da página (bg-slate-950)
+- **Footer**: ✅ Ajustado para finalizar sem bordas extras no final da página
+- **CSS Global**: ✅ Background-color atualizado para #020617 (slate-950) para eliminar bordas brancas na web
 
 ## Objetivo
 
